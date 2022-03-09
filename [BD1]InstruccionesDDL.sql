@@ -39,8 +39,7 @@ ALTER TABLE paciente ADD CONSTRAINT paciente_pk PRIMARY KEY (id_paciente);
 ------------------CREAR TABLA TRATAMIENTO------------------
 CREATE TABLE tratamiento (
     id_tratamiento     NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
-    nombre_tratamiento VARCHAR2(100) NOT NULL,
-    fecha_tratamiento  DATE NOT NULL
+    nombre_tratamiento VARCHAR2(100) NOT NULL
 );
 ALTER TABLE tratamiento ADD CONSTRAINT tratamiento_pk PRIMARY KEY (id_tratamiento);
 
@@ -48,6 +47,7 @@ ALTER TABLE tratamiento ADD CONSTRAINT tratamiento_pk PRIMARY KEY (id_tratamient
 ------------------CREAR TABLA PACIENTE_TRATAMIENTO------------------
 CREATE TABLE paciente_tratamiento (
     id_paciente_tratamiento     NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
+    fecha_tratamiento           DATE NOT NULL,
     id_tratamiento              NUMBER NOT NULL,
     id_paciente                 NUMBER NOT NULL
 );
@@ -59,7 +59,6 @@ ALTER TABLE paciente_tratamiento ADD CONSTRAINT paciente_tratamiento_tratamiento
 ------------------CREAR TABLA EVALUACION------------------
 CREATE TABLE evaluacion (
     id_evaluacion        NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
-    fecha_evaluacion     DATE NOT NULL,
     id_empleado          NUMBER NOT NULL,
     id_paciente          NUMBER NOT NULL
 );
@@ -71,7 +70,6 @@ ALTER TABLE evaluacion ADD CONSTRAINT evaluacion_paciente_fk FOREIGN KEY (id_pac
 ------------------CREAR TABLA DIAGNOSTICO------------------
 CREATE TABLE diagnostico (
     id_diagnostico     NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
-    rango              NUMBER NOT NULL,
     nombre_diagnostico VARCHAR2(50) NOT NULL
 );
 ALTER TABLE diagnostico ADD CONSTRAINT diagnostico_pk PRIMARY KEY (id_diagnostico);
@@ -88,6 +86,7 @@ ALTER TABLE sintoma ADD CONSTRAINT sintoma_pk PRIMARY KEY (id_sintoma);
 ------------------CREAR TABLA SINTOMA_DIAGNOSTICO------------------
 CREATE TABLE sintoma_diagnostico (
     id_sintoma_diagnostico      NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
+    rango                       NUMBER NOT NULL,
     id_sintoma                  NUMBER NOT NULL,
     id_diagnostico              NUMBER NOT NULL
 );
@@ -99,6 +98,7 @@ ALTER TABLE sintoma_diagnostico ADD CONSTRAINT sintoma_diagnostico_sintoma_fk FO
 ------------------CREAR TABLA EVALUACION_SINTOMA------------------
 CREATE TABLE evaluacion_sintoma (
     id_evaluacion_sintoma       NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
+    fecha_evaluacion            DATE NOT NULL,
     id_evaluacion               NUMBER NOT NULL,
     id_sintoma                  NUMBER NOT NULL
 );
