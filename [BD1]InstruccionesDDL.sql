@@ -56,9 +56,30 @@ ALTER TABLE paciente_tratamiento ADD CONSTRAINT paciente_tratamiento_paciente_fk
 ALTER TABLE paciente_tratamiento ADD CONSTRAINT paciente_tratamiento_tratamiento_fk FOREIGN KEY (id_tratamiento) REFERENCES tratamiento(id_tratamiento);
 
 
+------------------CREAR TABLA SINTOMA------------------
+CREATE TABLE sintoma (
+    id_sintoma     NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
+    nombre_sintoma VARCHAR2(50) NOT NULL
+);
+ALTER TABLE sintoma ADD CONSTRAINT sintoma_pk PRIMARY KEY (id_sintoma);
+
+
+------------------CREAR TABLA PACIENTE_SINTOMA------------------
+CREATE TABLE paciente_sintoma (
+    id_paciente_sintoma       NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
+    id_paciente                 NUMBER NOT NULL,
+    id_sintoma                  NUMBER NOT NULL
+);
+
+ALTER TABLE paciente_sintoma ADD CONSTRAINT paciente_sintoma_pk PRIMARY KEY (id_paciente_sintoma);
+ALTER TABLE paciente_sintoma ADD CONSTRAINT paciente_sintoma_evaluacion_fk FOREIGN KEY (id_paciente) REFERENCES paciente (id_paciente);
+ALTER TABLE paciente_sintoma ADD CONSTRAINT paciente_sintoma_sintoma_fk FOREIGN KEY (id_sintoma) REFERENCES sintoma (id_sintoma);
+
+
 ------------------CREAR TABLA EVALUACION------------------
 CREATE TABLE evaluacion (
     id_evaluacion        NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
+    fecha_evaluacion     DATE NOT NULL,
     id_empleado          NUMBER NOT NULL,
     id_paciente          NUMBER NOT NULL
 );
@@ -75,14 +96,6 @@ CREATE TABLE diagnostico (
 ALTER TABLE diagnostico ADD CONSTRAINT diagnostico_pk PRIMARY KEY (id_diagnostico);
 
 
-------------------CREAR TABLA SINTOMA------------------
-CREATE TABLE sintoma (
-    id_sintoma     NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
-    nombre_sintoma VARCHAR2(50) NOT NULL
-);
-ALTER TABLE sintoma ADD CONSTRAINT sintoma_pk PRIMARY KEY (id_sintoma);
-
-
 ------------------CREAR TABLA SINTOMA_DIAGNOSTICO------------------
 CREATE TABLE sintoma_diagnostico (
     id_sintoma_diagnostico      NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
@@ -95,26 +108,17 @@ ALTER TABLE sintoma_diagnostico ADD CONSTRAINT sintoma_diagnostico_diagnostico_f
 ALTER TABLE sintoma_diagnostico ADD CONSTRAINT sintoma_diagnostico_sintoma_fk FOREIGN KEY (id_sintoma) REFERENCES sintoma (id_sintoma);
 
 
-------------------CREAR TABLA EVALUACION_SINTOMA------------------
-CREATE TABLE evaluacion_sintoma (
-    id_evaluacion_sintoma       NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
-    fecha_evaluacion            DATE NOT NULL,
-    id_evaluacion               NUMBER NOT NULL,
-    id_sintoma                  NUMBER NOT NULL
-);
-ALTER TABLE evaluacion_sintoma ADD CONSTRAINT evaluacion_sintoma_pk PRIMARY KEY (id_evaluacion_sintoma);
-ALTER TABLE evaluacion_sintoma ADD CONSTRAINT evaluacion_sintoma_evaluacion_fk FOREIGN KEY (id_evaluacion) REFERENCES evaluacion (id_evaluacion);
-ALTER TABLE evaluacion_sintoma ADD CONSTRAINT evaluacion_sintoma_sintoma_fk FOREIGN KEY (id_sintoma) REFERENCES sintoma (id_sintoma);
-
 ------------------ELIMINACION DE TABLAS------------------
-drop table evaluacion_sintoma;
 drop table sintoma_diagnostico;
-drop table sintoma;
 drop table diagnostico;
 drop table evaluacion;
+drop table paciente_sintoma;
+drop table sintoma;
 drop table paciente_tratamiento;
 drop table tratamiento;
 drop table paciente;
 drop table empleado;
 drop table titulo;
+
+drop table TEMPORAL;
 

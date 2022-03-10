@@ -58,6 +58,23 @@ FROM TEMPORAL TT
 ;
 
 
+------------------LLENAR TABLA SINTOMA------------------
+INSERT INTO SINTOMA(NOMBRE_SINTOMA)
+SELECT DISTINCT SINTOMA_DEL_PACIENTE
+FROM TEMPORAL
+where   SINTOMA_DEL_PACIENTE is not null
+;
+
+
+------------------LLENAR TABLA PACIENTE_SINTOMA------------------
+INSERT INTO PACIENTE_SINTOMA(ID_PACIENTE, ID_SINTOMA)
+SELECT DISTINCT P.ID_PACIENTE, S.ID_SINTOMA
+FROM TEMPORAL TT
+    inner join PACIENTE P on NOMBRE_PACIENTE = P.NOMBRE
+                         and APELLIDO_PACIENTE = P.APELLIDO
+    inner join SINTOMA S on TT.SINTOMA_DEL_PACIENTE = S.NOMBRE_SINTOMA
+;
+
 ------------------LLENAR TABLA EVALUACION------------------
 INSERT INTO EVALUACION (FECHA_EVALUACION, ID_EMPLEADO, ID_PACIENTE)
 SElECT DISTINCT TT.FECHA_EVALUACION, E.ID_EMPLEADO, P.ID_PACIENTE
@@ -66,7 +83,7 @@ from TEMPORAL TT
                          and APELLIDO_EMPLEADO = E.APELLIDO
     inner join PACIENTE P on NOMBRE_PACIENTE = P.NOMBRE
                          and APELLIDO_PACIENTE = P.APELLIDO
-where FECHA_EVALUACION is not null;
+;
 
 
 ------------------LLENAR TABLA DIAGNOSTICO------------------
@@ -75,14 +92,6 @@ SELECT DISTINCT DIAGNOSTICO_DEL_SINTOMA
 FROM TEMPORAL
 where   RANGO_DEL_DIAGNOSTICO is not null
     and DIAGNOSTICO_DEL_SINTOMA is not null
-;
-
-
-------------------LLENAR TABLA SINTOMA------------------
-INSERT INTO SINTOMA(NOMBRE_SINTOMA)
-SELECT DISTINCT SINTOMA_DEL_PACIENTE
-FROM TEMPORAL
-where   SINTOMA_DEL_PACIENTE is not null
 ;
 
 
@@ -95,15 +104,6 @@ FROM TEMPORAL TT
 ;
 
 
-------------------LLENAR TABLA EVALUACION_SINTOMA------------------
-INSERT INTO EVALUACION_SINTOMA(ID_EVALUACION, ID_SINTOMA)
-SELECT DISTINCT E.ID_EVALUACION, S.ID_SINTOMA
-FROM TEMPORAL TT
-    inner join EVALUACION E on E.FECHA_EVALUACION = TT.FECHA_EVALUACION
-    inner join SINTOMA S on S.NOMBRE_SINTOMA= TT.SINTOMA_DEL_PACIENTE
-;
-
-
 ------------------CONTADORES------------------
 select * from
 (select count(*) Titulos from TITULO),
@@ -111,9 +111,11 @@ select * from
 (select count(*) Pacientes from PACIENTE),
 (select count(*) tratamientos from TRATAMIENTO),
 (select count(*) Paciente_Tratamiento from PACIENTE_TRATAMIENTO),
+(select count(*) Sintomas from SINTOMA),
+(select count(*) paciente_sintoma from PACIENTE_SINTOMA),
 (select count(*) Evaluaciones from EVALUACION),
 (select count(*) Diagnosticos from DIAGNOSTICO),
-(select count(*) Sintomas from SINTOMA),
-(select count(*) Sintoma_Diagnostico from SINTOMA_DIAGNOSTICO),
-(select count(*) Evaluacion_Sintoma from EVALUACION_SINTOMA);
+(select count(*) Sintoma_Diagnostico from SINTOMA_DIAGNOSTICO)
+;
+
 
